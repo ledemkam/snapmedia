@@ -1,7 +1,7 @@
 import { ID, Query } from "appwrite";
 
-import { appwriteConfig, account, databases, storage, avatars } from "./config";
-import { IUpdatePost, INewPost, INewUser, IUpdateUser } from "@/types";
+import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
+import { account, appwriteConfig, avatars, databases, storage } from "./config";
 
 // ============================================================
 // AUTH
@@ -225,7 +225,7 @@ export async function searchPosts(searchTerm: string) {
 }
 
 export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
-  const queries: unknown[] = [Query.orderDesc("$updatedAt"), Query.limit(10)];
+  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(10)];
 
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));
@@ -449,7 +449,7 @@ export async function getRecentPosts() {
 
 // ============================== GET USERS
 export async function getUsers(limit?: number) {
-  const queries: unknown[] = [Query.orderDesc("$createdAt")];
+  const queries: string[] = [Query.orderDesc("$createdAt")];
 
   if (limit) {
     queries.push(Query.limit(limit));
@@ -459,7 +459,7 @@ export async function getUsers(limit?: number) {
     const users = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.userCollectionId,
-      queries
+      queries as string[]
     );
 
     if (!users) throw Error;
